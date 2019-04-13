@@ -1,0 +1,314 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.1.0
+-- Dumped by pg_dump version 9.1.0
+-- Started on 2019-04-13 19:57:22
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 167 (class 3079 OID 11638)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 1883 (class 0 OID 0)
+-- Dependencies: 167
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 165 (class 1259 OID 34325)
+-- Dependencies: 5
+-- Name: estoque; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE estoque (
+    id integer NOT NULL,
+    id_produto integer NOT NULL,
+    quantidade numeric(13,2)
+);
+
+
+ALTER TABLE public.estoque OWNER TO postgres;
+
+--
+-- TOC entry 161 (class 1259 OID 34298)
+-- Dependencies: 5
+-- Name: hibernate_sequence; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE hibernate_sequence
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.hibernate_sequence OWNER TO postgres;
+
+--
+-- TOC entry 1884 (class 0 OID 0)
+-- Dependencies: 161
+-- Name: hibernate_sequence; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('hibernate_sequence', 1, false);
+
+
+--
+-- TOC entry 166 (class 1259 OID 34335)
+-- Dependencies: 5
+-- Name: movimento_estoque; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE movimento_estoque (
+    id integer NOT NULL,
+    id_estoque integer NOT NULL,
+    tipo_movimento character varying(15),
+    quantidade numeric(13,2)
+);
+
+
+ALTER TABLE public.movimento_estoque OWNER TO postgres;
+
+--
+-- TOC entry 162 (class 1259 OID 34300)
+-- Dependencies: 5
+-- Name: produto; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE produto (
+    id bigint NOT NULL,
+    descricao character varying(255),
+    valor_venda numeric(19,2)
+);
+
+
+ALTER TABLE public.produto OWNER TO postgres;
+
+--
+-- TOC entry 163 (class 1259 OID 34305)
+-- Dependencies: 5
+-- Name: venda; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE venda (
+    id bigint NOT NULL,
+    data date NOT NULL,
+    nome_cliente character varying(255) NOT NULL,
+    valor_total numeric(19,2) NOT NULL
+);
+
+
+ALTER TABLE public.venda OWNER TO postgres;
+
+--
+-- TOC entry 164 (class 1259 OID 34310)
+-- Dependencies: 5
+-- Name: venda_item; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE venda_item (
+    id bigint NOT NULL,
+    quantidade numeric(19,2) NOT NULL,
+    sub_total numeric(19,2),
+    id_produto bigint NOT NULL,
+    id_venda bigint NOT NULL
+);
+
+
+ALTER TABLE public.venda_item OWNER TO postgres;
+
+--
+-- TOC entry 1876 (class 0 OID 34325)
+-- Dependencies: 165
+-- Data for Name: estoque; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY estoque (id, id_produto, quantidade) FROM stdin;
+1	1	50.00
+2	2	100.00
+3	3	12.00
+\.
+
+
+--
+-- TOC entry 1877 (class 0 OID 34335)
+-- Dependencies: 166
+-- Data for Name: movimento_estoque; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY movimento_estoque (id, id_estoque, tipo_movimento, quantidade) FROM stdin;
+2	2	ENTRADA	100.00
+1	1	ENTRADA	50.00
+3	3	ENTRADA	12.00
+4	1	SAIDA	10.00
+5	1	SAIDA	10.00
+\.
+
+
+--
+-- TOC entry 1873 (class 0 OID 34300)
+-- Dependencies: 162
+-- Data for Name: produto; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY produto (id, descricao, valor_venda) FROM stdin;
+1	feijao	3.99
+2	arroz	2.56
+3	cafe	2.80
+\.
+
+
+--
+-- TOC entry 1874 (class 0 OID 34305)
+-- Dependencies: 163
+-- Data for Name: venda; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY venda (id, data, nome_cliente, valor_total) FROM stdin;
+1	2019-01-01	JOAO SILVA	200.00
+2	2019-01-02	MARIA LUCIA	230.00
+\.
+
+
+--
+-- TOC entry 1875 (class 0 OID 34310)
+-- Dependencies: 164
+-- Data for Name: venda_item; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY venda_item (id, quantidade, sub_total, id_produto, id_venda) FROM stdin;
+1	10.00	39.90	1	1
+2	10.00	25.60	2	1
+\.
+
+
+--
+-- TOC entry 1866 (class 2606 OID 34329)
+-- Dependencies: 165 165
+-- Name: estoque_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY estoque
+    ADD CONSTRAINT estoque_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1868 (class 2606 OID 34339)
+-- Dependencies: 166 166
+-- Name: movimento_estoque_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY movimento_estoque
+    ADD CONSTRAINT movimento_estoque_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1860 (class 2606 OID 34304)
+-- Dependencies: 162 162
+-- Name: produto_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY produto
+    ADD CONSTRAINT produto_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1864 (class 2606 OID 34314)
+-- Dependencies: 164 164
+-- Name: venda_item_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY venda_item
+    ADD CONSTRAINT venda_item_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1862 (class 2606 OID 34309)
+-- Dependencies: 163 163
+-- Name: venda_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY venda
+    ADD CONSTRAINT venda_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1871 (class 2606 OID 34330)
+-- Dependencies: 165 162 1859
+-- Name: estoque_id_produto_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY estoque
+    ADD CONSTRAINT estoque_id_produto_fkey FOREIGN KEY (id_produto) REFERENCES produto(id);
+
+
+--
+-- TOC entry 1870 (class 2606 OID 34320)
+-- Dependencies: 163 1861 164
+-- Name: fk1u3c2afiyu4xrcgs0n76fwefa; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY venda_item
+    ADD CONSTRAINT fk1u3c2afiyu4xrcgs0n76fwefa FOREIGN KEY (id_venda) REFERENCES venda(id);
+
+
+--
+-- TOC entry 1869 (class 2606 OID 34315)
+-- Dependencies: 164 162 1859
+-- Name: fk35kv02u9v2oqiv77yhyjj90ri; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY venda_item
+    ADD CONSTRAINT fk35kv02u9v2oqiv77yhyjj90ri FOREIGN KEY (id_produto) REFERENCES produto(id);
+
+
+--
+-- TOC entry 1872 (class 2606 OID 34340)
+-- Dependencies: 165 166 1865
+-- Name: movimento_estoque_id_estoque_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY movimento_estoque
+    ADD CONSTRAINT movimento_estoque_id_estoque_fkey FOREIGN KEY (id_estoque) REFERENCES estoque(id);
+
+
+--
+-- TOC entry 1882 (class 0 OID 0)
+-- Dependencies: 5
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2019-04-13 19:57:23
+
+--
+-- PostgreSQL database dump complete
+--
+
