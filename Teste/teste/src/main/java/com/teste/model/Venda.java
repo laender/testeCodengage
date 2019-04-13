@@ -38,7 +38,7 @@ public class Venda {
 	@Column(name = "valor_total")
 	private BigDecimal valorTotal;
 	
-	@OneToMany(cascade = CascadeType.REMOVE, mappedBy = "venda")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "venda")
 	private List<VendaItem> itens;
 	
 	public Long getId() {

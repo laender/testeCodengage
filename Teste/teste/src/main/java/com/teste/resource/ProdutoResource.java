@@ -38,16 +38,19 @@ public class ProdutoResource  {
 	}
 
 	@DeleteMapping("/produtos/{id}")
-	public String excuir(@PathVariable final long id){
-		
-		try {
-			Produto produto = produtoService.recuperaPorId(id).orElseThrow(()-> new Exception("Registro não encontrado"));
-    		produtoService.remover(produto);
-			return "ok";
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return e.getMessage();
+	public ResponseEntity<?> excuir(@PathVariable final long id){
+		Optional<Produto> produto = produtoService.recuperaPorId(id);
+		if(produto.isPresent()) {
+			try {
+				produtoService.remover(produto.get());
+				return ResponseEntity.ok(produto);
+			} catch (Exception e) {
+				return ResponseEntity.unprocessableEntity().build();
+			}
+			
+		}
+		else {
+			return ResponseEntity.notFound().build();
 		}
 	}
 

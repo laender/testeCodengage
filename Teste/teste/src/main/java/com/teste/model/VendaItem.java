@@ -1,5 +1,6 @@
 package com.teste.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.persistence.Entity;
@@ -13,8 +14,13 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "venda_item")
-public class VendaItem {
+public class VendaItem implements Serializable {
     
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4403403426923054523L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
