@@ -44,6 +44,7 @@ public class VendaService {
 
 	public void remover(final Venda venda) throws Exception {
 		this.atualizarEstoqueProduto(venda, EnumTipoMovimento.ENTRADA);
+		
 		vendaRepository.delete(venda);
 	}
 
